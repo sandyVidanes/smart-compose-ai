@@ -1,4 +1,4 @@
-service: smart-compose-ai-test
+service: smart-compose-ai
 frameworkVersion: '4'
 
 provider:
