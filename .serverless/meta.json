@@ -1,0 +1,2860 @@
+{
+  "/Users/clicksend/github/hackathon/smart-compose-ai": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.7",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "self": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "sandytest",
+            "frameworkVersion": "4",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "environment": {
+                "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:PutItem",
+                        "dynamodb:Get*",
+                        "dynamodb:Scan*",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "region": "us-east-1",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ApiLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-api"
+                    }
+                  },
+                  "GetCustomersLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-getCustomers"
+                    }
+                  },
+                  "CreateCustomerLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-createCustomer"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "sandytest",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:PutItem",
+                                  "dynamodb:Get*",
+                                  "dynamodb:Scan*",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DeleteItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "sandytest",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "ApiLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "index.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-api",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "ApiLogGroup"
+                    ]
+                  },
+                  "GetCustomersLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "getCustomers.getCustomers",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-getCustomers",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "GetCustomersLogGroup"
+                    ]
+                  },
+                  "CreateCustomerLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "createCustomer.createCustomer",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-createCustomer",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "CreateCustomerLogGroup"
+                    ]
+                  },
+                  "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "ApiLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "GetCustomersLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "CreateCustomerLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "HttpApi": {
+                    "Type": "AWS::ApiGatewayV2::Api",
+                    "Properties": {
+                      "Name": "dev-sandytest",
+                      "ProtocolType": "HTTP"
+                    }
+                  },
+                  "HttpApiStage": {
+                    "Type": "AWS::ApiGatewayV2::Stage",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "StageName": "$default",
+                      "AutoDeploy": true,
+                      "DefaultRouteSettings": {
+                        "DetailedMetricsEnabled": false
+                      }
+                    }
+                  },
+                  "ApiLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationApi": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGet": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationApi"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationApi"
+                  },
+                  "GetCustomersLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /customers",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationGetCustomers"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationGetCustomers"
+                  },
+                  "CreateCustomerLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationCreateCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRoutePostCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "POST /customer",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationCreateCustomer"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationCreateCustomer"
+                  },
+                  "CustomerTable": {
+                    "Type": "AWS::DynamoDB::Table",
+                    "Properties": {
+                      "AttributeDefinitions": [
+                        {
+                          "AttributeName": "primary_key",
+                          "AttributeType": "S"
+                        }
+                      ],
+                      "BillingMode": "PAY_PER_REQUEST",
+                      "KeySchema": [
+                        {
+                          "AttributeName": "primary_key",
+                          "KeyType": "HASH"
+                        }
+                      ],
+                      "TableName": "sandytest-customerTable-dev"
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "ApiLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ApiLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "GetCustomersLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-GetCustomersLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "CreateCustomerLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-CreateCustomerLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "HttpApiId": {
+                    "Description": "Id of the HTTP API",
+                    "Value": {
+                      "Ref": "HttpApi"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiId"
+                    }
+                  },
+                  "HttpApiUrl": {
+                    "Description": "URL of the HTTP API",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          {
+                            "Ref": "HttpApi"
+                          },
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          }
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiUrl"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "api": {
+                "handler": "index.handler",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/"
+                  }
+                ],
+                "name": "sandytest-dev-api",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+              },
+              "getCustomers": {
+                "handler": "getCustomers.getCustomers",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customers",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/customers"
+                  }
+                ],
+                "name": "sandytest-dev-getCustomers",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+              },
+              "createCustomer": {
+                "handler": "createCustomer.createCustomer",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customer",
+                      "method": "post"
+                    },
+                    "resolvedMethod": "POST",
+                    "resolvedPath": "/customer"
+                  }
+                ],
+                "name": "sandytest-dev-createCustomer",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+              }
+            },
+            "resources": {
+              "Resources": {
+                "CustomerTable": {
+                  "Type": "AWS::DynamoDB::Table",
+                  "Properties": {
+                    "AttributeDefinitions": [
+                      {
+                        "AttributeName": "primary_key",
+                        "AttributeType": "S"
+                      }
+                    ],
+                    "BillingMode": "PAY_PER_REQUEST",
+                    "KeySchema": [
+                      {
+                        "AttributeName": "primary_key",
+                        "KeyType": "HASH"
+                      }
+                    ],
+                    "TableName": "sandytest-customerTable-dev"
+                  }
+                }
+              },
+              "Outputs": {}
+            }
+          },
+          "configFileDirPath": "/Users/clicksend/github/hackathon/smart-compose-ai",
+          "config": {
+            "type": "self"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:self",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      },
+      "sls": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "sandytest",
+            "frameworkVersion": "4",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "environment": {
+                "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:PutItem",
+                        "dynamodb:Get*",
+                        "dynamodb:Scan*",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "region": "us-east-1",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ApiLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-api"
+                    }
+                  },
+                  "GetCustomersLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-getCustomers"
+                    }
+                  },
+                  "CreateCustomerLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-createCustomer"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "sandytest",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:PutItem",
+                                  "dynamodb:Get*",
+                                  "dynamodb:Scan*",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DeleteItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "sandytest",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "ApiLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "index.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-api",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "ApiLogGroup"
+                    ]
+                  },
+                  "GetCustomersLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "getCustomers.getCustomers",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-getCustomers",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "GetCustomersLogGroup"
+                    ]
+                  },
+                  "CreateCustomerLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "createCustomer.createCustomer",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-createCustomer",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "CreateCustomerLogGroup"
+                    ]
+                  },
+                  "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "ApiLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "GetCustomersLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "CreateCustomerLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "HttpApi": {
+                    "Type": "AWS::ApiGatewayV2::Api",
+                    "Properties": {
+                      "Name": "dev-sandytest",
+                      "ProtocolType": "HTTP"
+                    }
+                  },
+                  "HttpApiStage": {
+                    "Type": "AWS::ApiGatewayV2::Stage",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "StageName": "$default",
+                      "AutoDeploy": true,
+                      "DefaultRouteSettings": {
+                        "DetailedMetricsEnabled": false
+                      }
+                    }
+                  },
+                  "ApiLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationApi": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGet": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationApi"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationApi"
+                  },
+                  "GetCustomersLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /customers",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationGetCustomers"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationGetCustomers"
+                  },
+                  "CreateCustomerLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationCreateCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRoutePostCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "POST /customer",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationCreateCustomer"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationCreateCustomer"
+                  },
+                  "CustomerTable": {
+                    "Type": "AWS::DynamoDB::Table",
+                    "Properties": {
+                      "AttributeDefinitions": [
+                        {
+                          "AttributeName": "primary_key",
+                          "AttributeType": "S"
+                        }
+                      ],
+                      "BillingMode": "PAY_PER_REQUEST",
+                      "KeySchema": [
+                        {
+                          "AttributeName": "primary_key",
+                          "KeyType": "HASH"
+                        }
+                      ],
+                      "TableName": "sandytest-customerTable-dev"
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "ApiLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ApiLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "GetCustomersLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-GetCustomersLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "CreateCustomerLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-CreateCustomerLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "HttpApiId": {
+                    "Description": "Id of the HTTP API",
+                    "Value": {
+                      "Ref": "HttpApi"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiId"
+                    }
+                  },
+                  "HttpApiUrl": {
+                    "Description": "URL of the HTTP API",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          {
+                            "Ref": "HttpApi"
+                          },
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          }
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiUrl"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "api": {
+                "handler": "index.handler",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/"
+                  }
+                ],
+                "name": "sandytest-dev-api",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+              },
+              "getCustomers": {
+                "handler": "getCustomers.getCustomers",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customers",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/customers"
+                  }
+                ],
+                "name": "sandytest-dev-getCustomers",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+              },
+              "createCustomer": {
+                "handler": "createCustomer.createCustomer",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customer",
+                      "method": "post"
+                    },
+                    "resolvedMethod": "POST",
+                    "resolvedPath": "/customer"
+                  }
+                ],
+                "name": "sandytest-dev-createCustomer",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+              }
+            },
+            "resources": {
+              "Resources": {
+                "CustomerTable": {
+                  "Type": "AWS::DynamoDB::Table",
+                  "Properties": {
+                    "AttributeDefinitions": [
+                      {
+                        "AttributeName": "primary_key",
+                        "AttributeType": "S"
+                      }
+                    ],
+                    "BillingMode": "PAY_PER_REQUEST",
+                    "KeySchema": [
+                      {
+                        "AttributeName": "primary_key",
+                        "KeyType": "HASH"
+                      }
+                    ],
+                    "TableName": "sandytest-customerTable-dev"
+                  }
+                }
+              },
+              "Outputs": {}
+            }
+          },
+          "configFileDirPath": "/Users/clicksend/github/hackathon/smart-compose-ai",
+          "config": {
+            "type": "sls"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:sls",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      },
+      "aws": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "sandytest",
+            "frameworkVersion": "4",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "environment": {
+                "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+              },
+              "iam": {
+                "role": {
+                  "statements": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:PutItem",
+                        "dynamodb:Get*",
+                        "dynamodb:Scan*",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                    }
+                  ]
+                }
+              },
+              "stage": "dev",
+              "region": "us-east-1",
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "ApiLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-api"
+                    }
+                  },
+                  "GetCustomersLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-getCustomers"
+                    }
+                  },
+                  "CreateCustomerLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/sandytest-dev-createCustomer"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "sandytest",
+                                "dev",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:PutItem",
+                                  "dynamodb:Get*",
+                                  "dynamodb:Scan*",
+                                  "dynamodb:UpdateItem",
+                                  "dynamodb:DeleteItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "sandytest",
+                            "dev",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "ApiLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "index.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-api",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "ApiLogGroup"
+                    ]
+                  },
+                  "GetCustomersLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "getCustomers.getCustomers",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-getCustomers",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "GetCustomersLogGroup"
+                    ]
+                  },
+                  "CreateCustomerLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                        "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                      },
+                      "Handler": "createCustomer.createCustomer",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "sandytest-dev-createCustomer",
+                      "MemorySize": 1024,
+                      "Timeout": 6,
+                      "Environment": {
+                        "Variables": {
+                          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "CreateCustomerLogGroup"
+                    ]
+                  },
+                  "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "ApiLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "GetCustomersLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "CreateCustomerLambdaFunction"
+                      },
+                      "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+                    }
+                  },
+                  "HttpApi": {
+                    "Type": "AWS::ApiGatewayV2::Api",
+                    "Properties": {
+                      "Name": "dev-sandytest",
+                      "ProtocolType": "HTTP"
+                    }
+                  },
+                  "HttpApiStage": {
+                    "Type": "AWS::ApiGatewayV2::Stage",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "StageName": "$default",
+                      "AutoDeploy": true,
+                      "DefaultRouteSettings": {
+                        "DetailedMetricsEnabled": false
+                      }
+                    }
+                  },
+                  "ApiLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationApi": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGet": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationApi"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationApi"
+                  },
+                  "GetCustomersLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "GetCustomersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRouteGetCustomers": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "GET /customers",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationGetCustomers"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationGetCustomers"
+                  },
+                  "CreateCustomerLambdaPermissionHttpApi": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "apigateway.amazonaws.com",
+                      "SourceArn": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":execute-api:",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            ":",
+                            {
+                              "Ref": "AWS::AccountId"
+                            },
+                            ":",
+                            {
+                              "Ref": "HttpApi"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "HttpApiIntegrationCreateCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Integration",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "IntegrationType": "AWS_PROXY",
+                      "IntegrationUri": {
+                        "Fn::GetAtt": [
+                          "CreateCustomerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "PayloadFormatVersion": "2.0",
+                      "TimeoutInMillis": 30000
+                    }
+                  },
+                  "HttpApiRoutePostCustomer": {
+                    "Type": "AWS::ApiGatewayV2::Route",
+                    "Properties": {
+                      "ApiId": {
+                        "Ref": "HttpApi"
+                      },
+                      "RouteKey": "POST /customer",
+                      "Target": {
+                        "Fn::Join": [
+                          "/",
+                          [
+                            "integrations",
+                            {
+                              "Ref": "HttpApiIntegrationCreateCustomer"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "DependsOn": "HttpApiIntegrationCreateCustomer"
+                  },
+                  "CustomerTable": {
+                    "Type": "AWS::DynamoDB::Table",
+                    "Properties": {
+                      "AttributeDefinitions": [
+                        {
+                          "AttributeName": "primary_key",
+                          "AttributeType": "S"
+                        }
+                      ],
+                      "BillingMode": "PAY_PER_REQUEST",
+                      "KeySchema": [
+                        {
+                          "AttributeName": "primary_key",
+                          "KeyType": "HASH"
+                        }
+                      ],
+                      "TableName": "sandytest-customerTable-dev"
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "ApiLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-ApiLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "GetCustomersLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-GetCustomersLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "CreateCustomerLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-CreateCustomerLambdaFunctionQualifiedArn"
+                    }
+                  },
+                  "HttpApiId": {
+                    "Description": "Id of the HTTP API",
+                    "Value": {
+                      "Ref": "HttpApi"
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiId"
+                    }
+                  },
+                  "HttpApiUrl": {
+                    "Description": "URL of the HTTP API",
+                    "Value": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://",
+                          {
+                            "Ref": "HttpApi"
+                          },
+                          ".execute-api.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          }
+                        ]
+                      ]
+                    },
+                    "Export": {
+                      "Name": "sls-sandytest-dev-HttpApiUrl"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "api": {
+                "handler": "index.handler",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/"
+                  }
+                ],
+                "name": "sandytest-dev-api",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+              },
+              "getCustomers": {
+                "handler": "getCustomers.getCustomers",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customers",
+                      "method": "get"
+                    },
+                    "resolvedMethod": "GET",
+                    "resolvedPath": "/customers"
+                  }
+                ],
+                "name": "sandytest-dev-getCustomers",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+              },
+              "createCustomer": {
+                "handler": "createCustomer.createCustomer",
+                "events": [
+                  {
+                    "httpApi": {
+                      "path": "/customer",
+                      "method": "post"
+                    },
+                    "resolvedMethod": "POST",
+                    "resolvedPath": "/customer"
+                  }
+                ],
+                "name": "sandytest-dev-createCustomer",
+                "package": {},
+                "memory": 1024,
+                "timeout": 6,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+              }
+            },
+            "resources": {
+              "Resources": {
+                "CustomerTable": {
+                  "Type": "AWS::DynamoDB::Table",
+                  "Properties": {
+                    "AttributeDefinitions": [
+                      {
+                        "AttributeName": "primary_key",
+                        "AttributeType": "S"
+                      }
+                    ],
+                    "BillingMode": "PAY_PER_REQUEST",
+                    "KeySchema": [
+                      {
+                        "AttributeName": "primary_key",
+                        "KeyType": "HASH"
+                      }
+                    ],
+                    "TableName": "sandytest-customerTable-dev"
+                  }
+                }
+              },
+              "Outputs": {}
+            }
+          },
+          "configFileDirPath": "/Users/clicksend/github/hackathon/smart-compose-ai",
+          "config": {
+            "type": "aws"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:aws",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>",
+          "isDefaultConfig": true
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/clicksend/github/hackathon/smart-compose-ai",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "sandytest",
+      "frameworkVersion": "4",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "environment": {
+          "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+        },
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:PutItem",
+                  "dynamodb:Get*",
+                  "dynamodb:Scan*",
+                  "dynamodb:UpdateItem",
+                  "dynamodb:DeleteItem"
+                ],
+                "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+              }
+            ]
+          }
+        },
+        "stage": "dev",
+        "region": "us-east-1",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ApiLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/sandytest-dev-api"
+              }
+            },
+            "GetCustomersLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/sandytest-dev-getCustomers"
+              }
+            },
+            "CreateCustomerLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/sandytest-dev-createCustomer"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "sandytest",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sandytest-dev*:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:PutItem",
+                            "dynamodb:Get*",
+                            "dynamodb:Scan*",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:DeleteItem"
+                          ],
+                          "Resource": "arn:aws:dynamodb:us-east-1:193962410929:table/sandytest-customerTable-dev"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "sandytest",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "ApiLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                  "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                },
+                "Handler": "index.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "sandytest-dev-api",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "ApiLogGroup"
+              ]
+            },
+            "GetCustomersLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                  "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                },
+                "Handler": "getCustomers.getCustomers",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "sandytest-dev-getCustomers",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetCustomersLogGroup"
+              ]
+            },
+            "CreateCustomerLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+                  "S3Key": "serverless/sandytest/dev/1730862878664-2024-11-06T03:14:38.664Z/sandytest.zip"
+                },
+                "Handler": "createCustomer.createCustomer",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "sandytest-dev-createCustomer",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DYNAMODB_CUSTOMER_TABLE": "sandytest-customerTable-dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "CreateCustomerLogGroup"
+              ]
+            },
+            "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ApiLambdaFunction"
+                },
+                "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+              }
+            },
+            "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetCustomersLambdaFunction"
+                },
+                "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+              }
+            },
+            "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "CreateCustomerLambdaFunction"
+                },
+                "CodeSha256": "wZ0AKhJOewhlJm0z0MEd6yl0kknDOc/Msb0dJfy1kx8="
+              }
+            },
+            "HttpApi": {
+              "Type": "AWS::ApiGatewayV2::Api",
+              "Properties": {
+                "Name": "dev-sandytest",
+                "ProtocolType": "HTTP"
+              }
+            },
+            "HttpApiStage": {
+              "Type": "AWS::ApiGatewayV2::Stage",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "StageName": "$default",
+                "AutoDeploy": true,
+                "DefaultRouteSettings": {
+                  "DetailedMetricsEnabled": false
+                }
+              }
+            },
+            "ApiLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationApi": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGet": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationApi"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationApi"
+            },
+            "GetCustomersLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetCustomersLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationGetCustomers": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "GetCustomersLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGetCustomers": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /customers",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationGetCustomers"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationGetCustomers"
+            },
+            "CreateCustomerLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "CreateCustomerLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationCreateCustomer": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "CreateCustomerLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRoutePostCustomer": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "POST /customer",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationCreateCustomer"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationCreateCustomer"
+            },
+            "CustomerTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "primary_key",
+                    "AttributeType": "S"
+                  }
+                ],
+                "BillingMode": "PAY_PER_REQUEST",
+                "KeySchema": [
+                  {
+                    "AttributeName": "primary_key",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "TableName": "sandytest-customerTable-dev"
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+              "Export": {
+                "Name": "sls-sandytest-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "ApiLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+              },
+              "Export": {
+                "Name": "sls-sandytest-dev-ApiLambdaFunctionQualifiedArn"
+              }
+            },
+            "GetCustomersLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+              },
+              "Export": {
+                "Name": "sls-sandytest-dev-GetCustomersLambdaFunctionQualifiedArn"
+              }
+            },
+            "CreateCustomerLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+              },
+              "Export": {
+                "Name": "sls-sandytest-dev-CreateCustomerLambdaFunctionQualifiedArn"
+              }
+            },
+            "HttpApiId": {
+              "Description": "Id of the HTTP API",
+              "Value": {
+                "Ref": "HttpApi"
+              },
+              "Export": {
+                "Name": "sls-sandytest-dev-HttpApiId"
+              }
+            },
+            "HttpApiUrl": {
+              "Description": "URL of the HTTP API",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-sandytest-dev-HttpApiUrl"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "api": {
+          "handler": "index.handler",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/"
+            }
+          ],
+          "name": "sandytest-dev-api",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "ApiLambdaVersionKRshIvpjBs1OKVzPnHb4tBmWO6hIrPB2DwgRLZEU"
+        },
+        "getCustomers": {
+          "handler": "getCustomers.getCustomers",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/customers",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/customers"
+            }
+          ],
+          "name": "sandytest-dev-getCustomers",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetCustomersLambdaVersiondDguv3NZtXv2V5qQBgfeUTCPN8GbsuXZmij4BGJkWM"
+        },
+        "createCustomer": {
+          "handler": "createCustomer.createCustomer",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/customer",
+                "method": "post"
+              },
+              "resolvedMethod": "POST",
+              "resolvedPath": "/customer"
+            }
+          ],
+          "name": "sandytest-dev-createCustomer",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "CreateCustomerLambdaVersionrMGtsDfsYHZpMdhr16z93VXb2lb4rpeyJxZ7GkbLJqo"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "CustomerTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "primary_key",
+                  "AttributeType": "S"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST",
+              "KeySchema": [
+                {
+                  "AttributeName": "primary_key",
+                  "KeyType": "HASH"
+                }
+              ],
+              "TableName": "sandytest-customerTable-dev"
+            }
+          }
+        },
+        "Outputs": {}
+      }
+    },
+    "serviceRawFile": "service: sandytest\nframeworkVersion: '4'\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  environment:\n    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}\n  iam:\n    role:\n      statements:\n        - Effect: 'Allow'\n          Action:\n            - 'dynamodb:PutItem'\n            - 'dynamodb:Get*'\n            - 'dynamodb:Scan*'\n            - 'dynamodb:UpdateItem'\n            - 'dynamodb:DeleteItem'\n          Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-customerTable-${sls:stage}\n\nfunctions:\n  api:\n    handler: index.handler\n    events:\n      - httpApi:\n          path: /\n          method: get\n  getCustomers:\n    handler: getCustomers.getCustomers\n    events:\n      - httpApi:\n          path: /customers\n          method: get\n  createCustomer:\n    handler: createCustomer.createCustomer\n    events:\n      - httpApi:\n          path: /customer\n          method: post\n\n\nresources:\n  Resources:\n    CustomerTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        AttributeDefinitions:\n          - AttributeName: primary_key\n            AttributeType: S\n        BillingMode: PAY_PER_REQUEST\n        KeySchema:\n          - AttributeName: primary_key\n            KeyType: HASH\n        TableName: ${self:service}-customerTable-${sls:stage}\n\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "da79d1621ef6ea5411d9c842df96aa88",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "af7343af-a1b4-4de1-9365-6cba7918867d",
+    "orgName": "ijborda",
+    "userId": "4ffMh3CxZRbwGfKZJx",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "ijborda",
+    "subscription": null,
+    "userEmail": "imari.borda2018@gmail.com",
+    "serviceProviderAwsRegion": "us-east-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "193962410929",
+    "projectType": "traditional",
+    "versionSf": "4.4.7",
+    "serviceProviderAwsCfStackName": "sandytest-dev",
+    "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:us-east-1:193962410929:stack/sandytest-dev/54832510-9bed-11ef-a992-125487e00b97",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:193962410929:stack/sandytest-dev/54832510-9bed-11ef-a992-125487e00b97",
+    "serviceProviderAwsCfStackCreated": "2024-11-06T03:15:10.055Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "CreateCustomerLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:193962410929:function:sandytest-dev-createCustomer:1",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-sandytest-dev-CreateCustomerLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "GetCustomersLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:193962410929:function:sandytest-dev-getCustomers:1",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-sandytest-dev-GetCustomersLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ApiLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:193962410929:function:sandytest-dev-api:1",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-sandytest-dev-ApiLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "HttpApiId",
+        "OutputValue": "8yvzpchwy9",
+        "Description": "Id of the HTTP API",
+        "ExportName": "sls-sandytest-dev-HttpApiId"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-447ed499-7f7f",
+        "ExportName": "sls-sandytest-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "HttpApiUrl",
+        "OutputValue": "https://8yvzpchwy9.execute-api.us-east-1.amazonaws.com",
+        "Description": "URL of the HTTP API",
+        "ExportName": "sls-sandytest-dev-HttpApiUrl"
+      }
+    ]
+  }
+}

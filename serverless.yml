@@ -1,9 +1,10 @@
-service: sandytest
+service: smart-compose-ai
 frameworkVersion: '4'
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  region: ap-southeast-2
+  runtime: nodejs20.x
   environment:
     DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}
   iam:
