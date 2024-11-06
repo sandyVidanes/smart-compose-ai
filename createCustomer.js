@@ -16,7 +16,9 @@ module.exports.createCustomer = async (event) => {
      
       return {
         statusCode: 201,
-        customer : { ...body }
+        body: JSON.stringify({
+          message: body,
+        }),
       };
 
    } catch (e) {

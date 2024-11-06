@@ -5,6 +5,7 @@ provider:
   name: aws
   region: ap-southeast-2
   runtime: nodejs20.x
+  stage: 'dev'
   environment:
     DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}
   iam:
@@ -36,7 +37,7 @@ functions:
     handler: createCustomer.createCustomer
     events:
       - httpApi:
-          path: /customer
+          path: /smart-compose-ai
           method: post
 
 
