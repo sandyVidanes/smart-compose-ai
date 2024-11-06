@@ -2,5 +2,5 @@
   "resource": "/",
   "path": "/smart-compose-ai",
   "httpMethod": "POST",
-  "body": "{\"message\":\"Data sale $2.99 for 1GB of mobile data. sale ends on Nov 30. You can add more data at anytime but this is a special offer. Visit the AirTalk website to learn more.\", \"style\":\"upbeat\"}"
+  "body": "{\"message\":\"My boyfriend broke up with me and I saw him with my best friend in the movies. I am lying in the floor crying.\", \"style\":\"funny\"}"
 }
