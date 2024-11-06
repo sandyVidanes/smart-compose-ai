@@ -27,12 +27,6 @@ functions:
       - httpApi:
           path: /
           method: get
-  getCustomers:
-    handler: getCustomers.getCustomers
-    events:
-      - httpApi:
-          path: /customers
-          method: get
   createCustomer:
     handler: createCustomer.createCustomer
     events:
@@ -40,18 +34,4 @@ functions:
           path: /smart-compose-ai
           method: post
 
-
-resources:
-  Resources:
-    CustomerTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: primary_key
-            AttributeType: S
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: primary_key
-            KeyType: HASH
-        TableName: ${self:service}-customerTable-${sls:stage}
 
