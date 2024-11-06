@@ -3,10 +3,12 @@
 module.exports.handler = async (event) => {
    try {
       const body = JSON.parse(event.body);
+      const { message, style } = body;
+
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: `${body.message} in ${body.style} style`  || 'something' ,
+          message: `${message} in ${style} style`  || 'something' ,
         }),
       };
    } catch (e) {
