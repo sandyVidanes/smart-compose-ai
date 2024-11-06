@@ -18,14 +18,14 @@ provider:
 
 functions:
   api:
-    handler: api-get.handler
+    handler: src/api/get.handler
     events:
       - http:
           path: /
           method: get
           cors: true
   createCustomer:
-    handler: api-post.handler
+    handler: src/api/post.handler
     events:
       - http:
           path: /smart-compose-ai
