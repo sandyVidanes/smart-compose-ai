@@ -9,7 +9,7 @@ export const smartCompose = async (message, style) => {
   const { headers, data } = await axios.post(
     CONFIGS.OPENAI.URL,
     {
-        model: "gpt-4o-mini",
+        model: "gpt-4-turbo",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 100,
         temperature: 0.7
