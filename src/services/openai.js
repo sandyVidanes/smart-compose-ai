@@ -1,5 +1,6 @@
 import axios from "axios";
 import { configs } from "../helpers/configs.js";
+import { PROMPT_MAPPING } from "../constants/prompts.js";
 
 export const smartCompose = async (message, style) => {
   const prompt = getPromp(message, style);
@@ -32,12 +33,7 @@ export const smartCompose = async (message, style) => {
 }
 
 export const getPromp = (message, style) => {
-  switch (style) {
-    case 'short-and-sweet':
-      return `Make this message short and sweet: ${message}. Give answer only.`;
-    case 'tagalogize':
-      return `Make this tagalog: ${message}. Give answer only.`;
-    default:
-      return undefined;
-  }
+  const prompt = PROMPT_MAPPING[style];
+  if (!prompt) return undefined;
+  return `${prompt}. Give answer only. This is the original message: ${message}`; 
 }
