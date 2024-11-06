@@ -20,14 +20,14 @@ functions:
   api:
     handler: api-get.handler
     events:
-      - httpApi:
+      - http:
           path: /
           method: get
           cors: true
   createCustomer:
     handler: api-post.handler
     events:
-      - httpApi:
+      - http:
           path: /smart-compose-ai
           method: post
           cors: true
