@@ -2,5 +2,5 @@
   "resource": "/",
   "path": "/smart-compose-ai",
   "httpMethod": "POST",
-  "body": "{\"message\":\"message\", \"style\":\"short-and-sweet\"}"
+  "body": "{\"message\":\"Hi!\", \"style\":\"short-and-sweet\"}"
 }

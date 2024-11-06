@@ -7,6 +7,7 @@ provider:
   runtime: nodejs20.x
   stage: 'dev'
   environment:
+    OPENAI_API_URL: ${env:OPENAI_API_URL, 'xxxx'}
     OPENAI_API_KEY: ${env:OPENAI_API_KEY, 'xxxx'}
   iam:
     role:
