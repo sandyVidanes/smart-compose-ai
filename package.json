@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sandyVidanes/aws-serverless#readme",
   "dependencies": {
-    "aws-sdk": "^2.1493.0"
+    "aws-sdk": "^2.1493.0",
+    "serverless": "^4.4.7"
   }
 }
