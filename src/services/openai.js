@@ -34,7 +34,9 @@ export const smartCompose = async (message, style) => {
 export const getPromp = (message, style) => {
   switch (style) {
     case 'short-and-sweet':
-      return `Make this message short and sweet and tagalog: ${message}`;
+      return `Make this message short and sweet: ${message}`;
+    case 'tagalogize':
+      return `Make this tagalog: ${message}`;
     default:
       return undefined;
   }
