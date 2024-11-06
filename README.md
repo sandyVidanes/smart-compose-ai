@@ -5,6 +5,7 @@ This project is just to explore AWS serverless services
 
 ### Deployment
 ```
+$ source .env (populate first .env)
 $ serverless deploy
 $ serverless remove
 ```
