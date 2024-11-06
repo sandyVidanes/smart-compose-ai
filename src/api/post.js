@@ -6,7 +6,11 @@ export async function handler(event) {
    try {
       const body = JSON.parse(event.body);
       const { message, style } = body;
-      const newMessage = await smartCompose(message, style);
+      let newMessage = await smartCompose(message, style);
+
+      if (newMessage.length > 160) {
+        newMessage = await smartCompose(newMessage, 'shorter')
+      }
 
       return ok({ message: newMessage });
    } catch (e) {
