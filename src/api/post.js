@@ -9,7 +9,7 @@ export async function handler(event) {
       let newMessage = await smartCompose(message, style);
 
       if (newMessage.length > 150) {
-        newMessage = await smartCompose(newMessage, 'shorter')
+        newMessage = await smartCompose(newMessage, 'sanitize');
       }
 
       return ok({ message: newMessage });
