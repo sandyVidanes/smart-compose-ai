@@ -35,5 +35,5 @@ export const smartCompose = async (message, style) => {
 export const getPromp = (message, style) => {
   const prompt = PROMPT_MAPPING[style];
   if (!prompt) return undefined;
-  return `${prompt}. Give answer only. This is the message to modify: ${message}`; 
+  return `Change to something new, please. ${prompt}. Give answer only. This is the message to modify: ${message}`; 
 }
