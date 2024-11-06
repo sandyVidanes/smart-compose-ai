@@ -8,7 +8,7 @@ export async function handler(event) {
       const { message, style } = body;
       let newMessage = await smartCompose(message, style);
 
-      if (newMessage.length > 160) {
+      if (newMessage.length > 150) {
         newMessage = await smartCompose(newMessage, 'shorter')
       }
 
