@@ -1,13 +1,13 @@
 import axios from "axios";
-import { configs } from "../helpers/configs.js";
 import { PROMPT_MAPPING } from "../constants/prompts.js";
+import { CONFIGS } from "../constants/configs.js";
 
 export const smartCompose = async (message, style) => {
   const prompt = getPromp(message, style);
   if (!prompt) return message;
 
   const { headers, data } = await axios.post(
-    configs.OPENAI.URL,
+    CONFIGS.OPENAI.URL,
     {
         model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
@@ -16,7 +16,7 @@ export const smartCompose = async (message, style) => {
     },
     {
         headers: {
-            'Authorization': `Bearer ${configs.OPENAI.API_KEY}`,
+            'Authorization': `Bearer ${CONFIGS.OPENAI.API_KEY}`,
             'Content-Type': 'application/json'
         }
     }
