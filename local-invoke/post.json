@@ -1,0 +1,6 @@
+{
+  "resource": "/",
+  "path": "/smart-compose-ai",
+  "httpMethod": "POST",
+  "body": "{\"message\":\"message\", \"style\":\"short-and-sweet\"}"
+}

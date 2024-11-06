@@ -1,5 +1,5 @@
 'use strict';
-import { ok } from "../helpers/response.js";
+import { ok, serverError } from "../helpers/response.js";
  
 export async function handler(event) {
    try {
@@ -11,5 +11,6 @@ export async function handler(event) {
       });
    } catch (e) {
       console.log(e);
+      return serverError();
    }
 }
