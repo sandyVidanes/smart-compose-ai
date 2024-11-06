@@ -1,22 +1,15 @@
 'use strict';
+import { ok } from "../helpers/response.js";
  
-module.exports.handler = async (event) => {
+export async function handler(event) {
    try {
       const body = JSON.parse(event.body);
       const { message, style } = body;
 
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Methods': '*'
-        },
-        body: JSON.stringify({
-          message: `${message} in ${style} style`  || 'something' ,
-        }),
-      };
+      return ok({
+        message: `${message} in ${style} style`  || 'something' ,
+      });
    } catch (e) {
       console.log(e);
    }
-};
+}

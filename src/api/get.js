@@ -1,20 +1,9 @@
 'use strict';
+import { ok } from "../helpers/response.js";
 
-module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Allow-Methods': '*'
-    },
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v3.0! Your function executed successfully!",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-};
+export async function handler(event) {
+  return ok({
+    message: "Go Serverless v3.0! Your function executed successfully!",
+    input: event,
+  });
+}
