@@ -22,13 +22,13 @@ provider:
 
 functions:
   api:
-    handler: index.handler
+    handler: api-get.handler
     events:
       - httpApi:
           path: /
           method: get
   createCustomer:
-    handler: createCustomer.createCustomer
+    handler: api-post.handler
     events:
       - httpApi:
           path: /smart-compose-ai

@@ -1,7 +1,6 @@
 'use strict';
-const AWS = require('aws-sdk');
  
-module.exports.createCustomer = async (event) => {
+module.exports.handler = async (event) => {
    try {
       const body = JSON.parse(event.body);
      
